@@ -25,7 +25,7 @@ export default function App() {
   
   function getSortedRepositories(repositories) {
     return [...repositories].sort((actualRepository, nextRepository) => {
-      return actualRepository.title.localeCompare(nextRepository.title);
+      return actualRepository.likes < nextRepository.likes;
     });
   }
 
