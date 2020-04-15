@@ -15,9 +15,20 @@ export default function App() {
   const [repositories, setRepositories] = useState([]);
 
   useEffect(() => {
-    api.get('/repositories').then(response => setRepositories(response.data));
+    api.get('/repositories').then(response => {
+
+      const sortedRepositories = getSortedRepositories(response.data);
+
+      setRepositories(sortedRepositories);
+    });
   }, []);
   
+  function getSortedRepositories(repositories) {
+    return [...repositories].sort((actualRepository, nextRepository) => {
+      return actualRepository.title.localeCompare(nextRepository.title);
+    });
+  }
+
   async function handleLikeRepository(id) {
     // Implement "Like Repository" functionality
     const response = await api.post(`/repositories/${id}/like`);
@@ -26,7 +37,9 @@ export default function App() {
 
     const repository = response.data;
 
-    setRepositories([...filtered, repository]);
+    const sortedRepositories = getSortedRepositories([...filtered, repository]);
+
+    setRepositories(sortedRepositories);
   }
 
   return (
@@ -34,7 +47,7 @@ export default function App() {
       <StatusBar barStyle="light-content" backgroundColor="#7159c1" />
       <SafeAreaView style={styles.container}>
         <FlatList
-          data={repositories.sort((a, b) => a.title.localeCompare(b.title))}
+          data={repositories}
           keyExtractor={repo => repo.id}
           renderItem={({ item: repo }) => (
             <View style={styles.repositoryContainer}>
