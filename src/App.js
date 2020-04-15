@@ -11,12 +11,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-function getSortedRepositories(repositories) {
-  return [...repositories].sort((actualRepository, nextRepository) => {
-    return actualRepository.likes < nextRepository.likes;
-  });
-}
-
 export default function App() {
   const [repositories, setRepositories] = useState([]);
 
@@ -28,6 +22,12 @@ export default function App() {
       setRepositories(sortedRepositories);
     });
   }, []);
+
+  function getSortedRepositories(repositories) {
+    return [...repositories].sort((actualRepository, nextRepository) => {
+      return actualRepository.likes < nextRepository.likes;
+    });
+  }
 
   async function handleLikeRepository(id) {
     // Implement "Like Repository" functionality
